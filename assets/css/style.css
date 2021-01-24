@@ -4,3 +4,25 @@
   padding: 0;
   background: rgba(0, 200, 140, 0.4);
 }
+
+#quesitonScreen {
+  background: snow;
+}
+
+#questionChoices {
+  background: peru;
+}
+
+.rectangle {
+  height: 40%;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.fullscreen {
+  height: 90vh;
+}
+
+.header {
+  height: 10vh;
+}
