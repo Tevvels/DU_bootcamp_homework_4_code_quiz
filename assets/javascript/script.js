@@ -7,7 +7,7 @@ var choices = document.getElementById("questionChoices");
 
 // variables needed for the script 
 var timer;
-var questions = ["question 1","question 2", "question 3", "question 4"];
+var questions = [];
 var answers;
 var correctAnwswer ;
 var randomQuestion; 
@@ -31,10 +31,45 @@ screen.appendChild(button);
 // var question = [];
 // var correctAnwswer;
 
+// my questions 
+
+var questionOne = {
+    question: "what kind of coding langauge is JavaScript",
+    answer: "Object oriented language",
+    wrongAnswers: ["a framework","Procedural Programming Language","Logic Programming Language"],
+    results:false
+}
+
+var questionTwo = {
+    question: "how to you store a piece information in JavaScript",
+    answer: "in 2",
+    wrongAnswers: ["a function","if statement","a for loop"],
+    results:false
+}
+var questionThree = {
+    question: "how to you store a piece information in JavaScript",
+    answer: "in 3",
+    wrongAnswers: ["a function","if statement","a for loop"],
+    results:false
+}
+var questionFour = {
+    question: "how to you store a piece information in JavaScript",
+    answer: "in 4",
+    wrongAnswers: ["a function","if statement","a for loop"],
+    results:false
+}
+var questionFive = {
+    question: "in 5",
+    answer: "in 5",
+    wrongAnswers: ["a function","if statement","a for loop"],
+    results:false
+}
+
+questions.push(questionOne,questionTwo,questionThree,questionFour,questionFive);
+
+
 startQuiz = function(){
     buildQuestionaire = function(){
-       randomQuestion = Math.floor(Math.random() * questions.length);
-        screen.textContent = questions[randomQuestion];
 
     
         questionChoices = document.createElement("button");
@@ -53,25 +88,43 @@ startQuiz = function(){
     buildQuestionaire();
     buildQuestionaire();
 
-    var questionOne = {
-        question: "what kind of coding langauge is JavaScript",
-        answer: "Object oriented language",
-        wrongAnswers: ["a framework","Procedural Programming Language","Logic Programming Language"],
+    
+    randomQuestion = Math.floor(Math.random() * questions.length);
+    screen.textContent = questions[randomQuestion].question;
+    var theQuestions = document.body.children[1].children[1].children[0];
+    
+
+   var randomOrder = Math.floor(Math.random() * Math.floor(3));
+    theQuestions.children[randomOrder].textContent = questions[randomQuestion].answer;
+    // theQuestions.children[randomOrder].style.float = "left";
+    theQuestions.children[randomOrder].addEventListener("click",function(){
+        questions[randomQuestion].results = true;
     }
+)
+    console.log(randomQuestion);
+    console.log("randomOrder:" + randomOrder)
 
     
+   for(i = 0; i < 4; i++){ 
+    theQuestions.children[i].addEventListener("click",function(){
 
+
+        if(questions[randomQuestion].results){
+           console.log( "Your Correct!!")
+        } else {
+           console.log( "Sorry it was " + questions[randomQuestion].answer);
+        }
+    screen.textContent = questions[randomQuestion].results;
+
+
+        startQuiz();
+// make a random array. run through it in random order for each option.
+// the field yates shuffle
     
-    questionChoices.addEventListener("click",function(){
 
-
-
-    
 
     });
-
-    document.body.children[1].children[1].children[0].children[2].style.background = "red";
-
+   }
 
 }
 
@@ -80,6 +133,9 @@ startQuiz = function(){
 
 
     // multiple choice questions need 4 buttons.
+
+
+
     // runs responds and gives points or deducts time 
 
     // display
@@ -129,3 +185,4 @@ startQuiz = function(){
 //         list of highscores
 //         button for replay
 // }
+
