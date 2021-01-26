@@ -37,3 +37,11 @@
   width: 50%;
   height: 50%;
 }
+.sideBar {
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  height: 200px;
+  width: 50px;
+  background-color: violet;
+}

@@ -3,21 +3,23 @@
 var screen = document.getElementById("questionScreen");
 var choices = document.getElementById("questionChoices");
 
-
+// 5 questions. simple layout. 60 seconds highscore is the timer remainder. deduct 15 per incorrect 
 
 // variables needed for the script 
-var timer;
+var timer = 60;
 var questions = [];
-var answers;
-var correctAnwswer ;
 var randomQuestion; 
+var correctAnswer = 0;
 var questionChoices;
+var clock;
 // variable to create elements 
 
 var button = document.createElement("button");
 
 button.addEventListener("click",function(){
     startQuiz();
+     clock = setInterval(Timer,1000);
+
 });
 button.textContent = "click me";
 button.setAttribute("class","button");
@@ -66,7 +68,8 @@ var questionFive = {
 }
 
 questions.push(questionOne,questionTwo,questionThree,questionFour,questionFive);
-
+var apples = arrayShuffle(questions);
+console.log(apples)
 
 startQuiz = function(){
     buildQuestionaire = function(){
@@ -82,21 +85,29 @@ startQuiz = function(){
 
 
     }
+    buildsidebar  = function(){
+        sideBar = document.createElement('aside');
+        sideBar.setAttribute("class","sideBar");
+        document.body.appendChild(sideBar);
+    
+    }
     choices.textContent = '';
     buildQuestionaire();
     buildQuestionaire();
     buildQuestionaire();
     buildQuestionaire();
-
+    buildsidebar();
     
     randomQuestion = Math.floor(Math.random() * questions.length);
+    // var randomQuestionaire = arrayShuffle(questions);
+
     screen.textContent = questions[randomQuestion].question;
     var theQuestions = document.body.children[1].children[1].children[0];
     
 
    var randomOrder = Math.floor(Math.random() * Math.floor(3));
     theQuestions.children[randomOrder].textContent = questions[randomQuestion].answer;
-    // theQuestions.children[randomOrder].style.float = "left";
+    theQuestions.children[randomOrder].style.background = "red";
     theQuestions.children[randomOrder].addEventListener("click",function(){
         questions[randomQuestion].results = true;
     }
@@ -104,29 +115,69 @@ startQuiz = function(){
     console.log(randomQuestion);
     console.log("randomOrder:" + randomOrder)
 
-    
+
+
    for(i = 0; i < 4; i++){ 
     theQuestions.children[i].addEventListener("click",function(){
+        event.stopPropagation();
+        event.preventDefault();
 
 
         if(questions[randomQuestion].results){
-           console.log( "Your Correct!!")
+           console.log( "Your Correct!!");
+           correctAnswer++;
+           console.log(correctAnswer);
+           
+           
         } else {
            console.log( "Sorry it was " + questions[randomQuestion].answer);
+           timer = timer - 15;
         }
-    screen.textContent = questions[randomQuestion].results;
 
+        if(correctAnswer <= 5){
+            "your finished";
+            return;
+        }
+        screen.textContent = questions[randomQuestion].results;
+        
 
         startQuiz();
 // make a random array. run through it in random order for each option.
 // the field yates shuffle
+
+
+        });
     
+       }
+}
 
+function Timer(){
+    timer--;
+    sideBar.textContent = Math.floor(timer);
 
-    });
-   }
+    if(timer <= 0){
+        clearInterval(clock);
+    }
+
 
 }
+
+
+function arrayShuffle(array){
+    var current = array.length;
+    var tempValue,newIndex;
+
+    while(current){
+        newIndex = Math.floor(Math.random() * current--);
+
+        tempValue = array[current];
+        array[current] = array[newIndex];
+        array[newIndex] = tempValue;
+    }
+    return array;
+
+}
+
 
     // creates the space where the questions will be asked.
 
