@@ -9,7 +9,7 @@ var choices = document.getElementById("questionChoices");
 var timer = 60;
 var questions = [];
 var randomQuestion; 
-var correctAnswer = 0;
+var counter = 0;
 var questionChoices;
 var clock;
 // variable to create elements 
@@ -19,6 +19,10 @@ var button = document.createElement("button");
 button.addEventListener("click",function(){
     startQuiz();
      clock = setInterval(Timer,1000);
+     if(timer == 0 || counter == 5 ){
+        clearInterval(clock); 
+        end();
+     }
 
 });
 button.textContent = "click me";
@@ -38,38 +42,46 @@ screen.appendChild(button);
 var questionOne = {
     question: "what kind of coding langauge is JavaScript",
     answer: "Object oriented language",
-    wrongAnswers: ["a framework","Procedural Programming Language","Logic Programming Language"],
-    results:false
+    wrongAnswers: ["a framework","Procedural Programming Language","Logic Programming Language","Object oriented language"],
+    results:false,
+    answered:false,
+    counter: 0
 }
 
 var questionTwo = {
     question: "how to you store a piece information in JavaScript",
-    answer: "in 2",
-    wrongAnswers: ["a function","if statement","a for loop"],
-    results:false
+    answer: "A variable",
+    wrongAnswers: ["a function","if statement","a for loop","A variable"],
+    results:false,
+    answered:false,
+    counter: 0
 }
 var questionThree = {
-    question: "how to you store a piece information in JavaScript",
-    answer: "in 3",
-    wrongAnswers: ["a function","if statement","a for loop"],
-    results:false
+    question: "which is True?",
+    answer: "All of them",
+    wrongAnswers: ["JavaScript runs in the browser","Javascript makes webpages dynamic","Javascript is not Java","All of them"],
+    results:false,
+    answered:false,
+    counter: 0
 }
 var questionFour = {
-    question: "how to you store a piece information in JavaScript",
-    answer: "in 4",
-    wrongAnswers: ["a function","if statement","a for loop"],
-    results:false
+    question: "How do we added functionality to DOM elements",
+    answer: "an addEventListener",
+    wrongAnswers: ["a setInterval","a array","a for loop","an addEventListener"],
+    results:false,
+    answered:false,
+    counter: 0
 }
 var questionFive = {
-    question: "in 5",
-    answer: "in 5",
-    wrongAnswers: ["a function","if statement","a for loop"],
-    results:false
+    question: "Which is a Javascript Library",
+    answer: "Jquery",
+    wrongAnswers: ["CSS","Bootstrap","Python","Jquery"],
+    results:false,
+    answered:false,
+    counter: 0
 }
 
 questions.push(questionOne,questionTwo,questionThree,questionFour,questionFive);
-var apples = arrayShuffle(questions);
-console.log(apples)
 
 startQuiz = function(){
     buildQuestionaire = function(){
@@ -91,6 +103,7 @@ startQuiz = function(){
         document.body.appendChild(sideBar);
     
     }
+    
     choices.textContent = '';
     buildQuestionaire();
     buildQuestionaire();
@@ -99,19 +112,26 @@ startQuiz = function(){
     buildsidebar();
     
     randomQuestion = Math.floor(Math.random() * questions.length);
-    // var randomQuestionaire = arrayShuffle(questions);
+   var randomOrder = Math.floor(Math.random() * Math.floor(3));
+   if(questions[randomQuestion].answered == false || counter < 5){
+
+    console.log("okay");
 
     screen.textContent = questions[randomQuestion].question;
     var theQuestions = document.body.children[1].children[1].children[0];
-    
 
-   var randomOrder = Math.floor(Math.random() * Math.floor(3));
-    theQuestions.children[randomOrder].textContent = questions[randomQuestion].answer;
-    theQuestions.children[randomOrder].style.background = "red";
+    
+    for(i = 0; i < theQuestions.children.length;i++){
+        var a = [0,1,2,3];
+        var b = parseInt(arrayShuffle(a));
+        
+
+        theQuestions.children[b].textContent = questions[randomQuestion].wrongAnswers[i];
+    }
     theQuestions.children[randomOrder].addEventListener("click",function(){
         questions[randomQuestion].results = true;
-    }
-)
+    })
+
     console.log(randomQuestion);
     console.log("randomOrder:" + randomOrder)
 
@@ -119,37 +139,42 @@ startQuiz = function(){
 
    for(i = 0; i < 4; i++){ 
     theQuestions.children[i].addEventListener("click",function(){
-        event.stopPropagation();
-        event.preventDefault();
 
 
-        if(questions[randomQuestion].results){
-           console.log( "Your Correct!!");
-           correctAnswer++;
-           console.log(correctAnswer);
+        if(questions[randomQuestion].results == questions[randomQuestion].answer){
+           console.log( counter);
+           questions[randomQuestion].answered = true;
+           counter++
+        startQuiz();
+
            
            
         } else {
            console.log( "Sorry it was " + questions[randomQuestion].answer);
            timer = timer - 15;
-        }
-
-        if(correctAnswer <= 5){
-            "your finished";
-            return;
-        }
-        screen.textContent = questions[randomQuestion].results;
-        
-
+           questions[randomQuestion].answered = true;
+            counter++
         startQuiz();
+
+        }
+
+
+    });
 // make a random array. run through it in random order for each option.
 // the field yates shuffle
 
 
-        });
-    
-       }
-}
+        }
+    }
+
+    if(counter == 5){
+        end();
+    }
+
+    }
+
+
+
 
 function Timer(){
     timer--;
@@ -178,7 +203,10 @@ function arrayShuffle(array){
 
 }
 
-
+function end(){
+    screen.textContent = "Game Finished";
+    choices.textContent = timer;
+}
     // creates the space where the questions will be asked.
 
 
