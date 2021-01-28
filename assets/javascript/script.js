@@ -1,4 +1,3 @@
-
 // variables that connect to elements on the DOM 
 var screen = document.getElementById("questionScreen");
 var choices = document.getElementById("questionChoices");
@@ -8,10 +7,11 @@ var choices = document.getElementById("questionChoices");
 // variables needed for the script 
 var timer = 60;
 var questions = [];
-var randomQuestion; 
+// var randomQuestion; 
 var counter = 0;
 var questionChoices;
 var clock;
+var highscores = [localStorage.getItem("score")];
 // variable to create elements 
 
 var button = document.createElement("button");
@@ -23,6 +23,8 @@ button.addEventListener("click",function(){
         clearInterval(clock); 
         end();
      }
+
+
 
 });
 button.textContent = "click me";
@@ -38,6 +40,7 @@ screen.appendChild(button);
 // var correctAnwswer;
 
 // my questions 
+
 
 var questionOne = {
     question: "what kind of coding langauge is JavaScript",
@@ -83,96 +86,92 @@ var questionFive = {
 
 questions.push(questionOne,questionTwo,questionThree,questionFour,questionFive);
 
-startQuiz = function(){
-    buildQuestionaire = function(){
 
-    
-        questionChoices = document.createElement("button");
-        questionChoices.setAttribute("class","questionChoices");
+buildQuestionaire = function(){
+        // creates a  button element 
+    questionChoices = document.createElement("button");
+        // sets a class on to the element 
+    questionChoices.setAttribute("class","questionChoices");
+        // the event that will happen when I click on the button with one of the choices
+    questionChoices.addEventListener("click",function(){
+        event.preventDefault();
 
+        console.log(this.textContent);
 
-        
-        choices.appendChild(questionChoices);
-   
-
-
-    }
-    buildsidebar  = function(){
-        sideBar = document.createElement('aside');
-        sideBar.setAttribute("class","sideBar");
-        document.body.appendChild(sideBar);
-    
-    }
-    
-    choices.textContent = '';
-    buildQuestionaire();
-    buildQuestionaire();
-    buildQuestionaire();
-    buildQuestionaire();
-    buildsidebar();
-    
-    randomQuestion = Math.floor(Math.random() * questions.length);
-   var randomOrder = Math.floor(Math.random() * Math.floor(3));
-   if(questions[randomQuestion].answered == false || counter < 5){
-
-    console.log("okay");
-
-    screen.textContent = questions[randomQuestion].question;
-    var theQuestions = document.body.children[1].children[1].children[0];
-
-    
-    for(i = 0; i < theQuestions.children.length;i++){
-        var a = [0,1,2,3];
-        var b = parseInt(arrayShuffle(a));
-        
-
-        theQuestions.children[b].textContent = questions[randomQuestion].wrongAnswers[i];
-    }
-    theQuestions.children[randomOrder].addEventListener("click",function(){
-        questions[randomQuestion].results = true;
-    })
-
-    console.log(randomQuestion);
-    console.log("randomOrder:" + randomOrder)
+        // this.textContent can be valuated 
 
 
-
-   for(i = 0; i < 4; i++){ 
-    theQuestions.children[i].addEventListener("click",function(){
-
-
-        if(questions[randomQuestion].results == questions[randomQuestion].answer){
-           console.log( counter);
-           questions[randomQuestion].answered = true;
-           counter++
-        startQuiz();
-
-           
-           
-        } else {
-           console.log( "Sorry it was " + questions[randomQuestion].answer);
-           timer = timer - 15;
-           questions[randomQuestion].answered = true;
-            counter++
-        startQuiz();
+        if(this.textContent !== questions[counter].answer){
+            timer = timer - 15;
+            questions[counter].answered = true;
+        }else{
+            questions[counter].answered = true;
 
         }
+     
+
+  
+
+
+    
+        counter++;
+
+        startQuiz();
+
+
 
 
     });
-// make a random array. run through it in random order for each option.
-// the field yates shuffle
+
+        //places that button onto the DOM where the choices section is location
+        choices.appendChild(questionChoices)
 
 
-        }
+}
+// builds the scoreboard
+buildsidebar  = function(){
+    // creates the aside element
+    sideBar = document.createElement('aside');
+    // set a class of sidebar to the element
+    sideBar.setAttribute("class","sideBar");
+    //places the sidebar on the body element
+    document.body.appendChild(sideBar);
+
+}
+
+buildsidebar();
+
+//the function that starts the Quiz
+startQuiz = function(){
+    event.preventDefault();
+
+    //clears the choices sections
+    choices.textContent = '';
+     //establishes four buttons for the questionaire 
+    buildQuestionaire();
+    buildQuestionaire();
+    buildQuestionaire();
+    buildQuestionaire();
+    // and the scoreboard
+    
+//    var randomOrder = Math.floor(Math.random() * Math.floor(3));
+
+//  if statement verifying if the question has been answered
+
+   if(questions.answered == false || counter < 5){
+
+    var theQuestions = document.querySelectorAll(".questionChoices");  
+    screen.textContent = questions[counter].question;
+
+   for(i = 0; i < 4; i++){
+    var b = arrayShuffle(questions[counter].wrongAnswers);
+        for(i = 0; i < theQuestions.length;i++){
+            theQuestions[i].textContent = b[i];
+            }
+         }
+      }
+    
     }
-
-    if(counter == 5){
-        end();
-    }
-
-    }
-
 
 
 
@@ -180,8 +179,11 @@ function Timer(){
     timer--;
     sideBar.textContent = Math.floor(timer);
 
-    if(timer <= 0){
+    if(timer <= 0 || counter == 5){
         clearInterval(clock);
+        highscores.push(timer);
+        localStorage.setItem("score", highscores);
+        end();
     }
 
 
@@ -204,64 +206,42 @@ function arrayShuffle(array){
 }
 
 function end(){
-    screen.textContent = "Game Finished";
-    choices.textContent = timer;
-}
-    // creates the space where the questions will be asked.
+
+    var ini =  prompt("Your Initials place?");
+
+    localStorage.setItem("ini",ini);
 
 
-
-    // multiple choice questions need 4 buttons.
-
-
-
-    // runs responds and gives points or deducts time 
-
-    // display
-    // TimeR
-    // buttons
-    // question
-    // question staging 
-    // points.
+    var endHeaderDiv = document.createElement('div');
+    endHeaderDiv.textContent  = "Game finished";
+    endHeaderDiv.setAttribute("class","sideBar-end")
+    document.body.appendChild(endHeaderDiv);
 
 
-    // question cycle process 
-        // dynamic 
-        //     start button pushed
+    choices.textContent = '';
 
-
-            
-
-
-                // its a iteration that slowly counts down to zero
-                // correct answers are rewarded points * timer
-                    // uncorrect answers are deducted timer - x value 
-
-
-
-
-        //         div with for options to choose 
-        //         probably a form with a radiobutton with the options.
-                // after the question is picked the value is stored. the last questions are .removed
-                // and  a new set with those value comes up 
-
-
-
-
-                
-                
-
-
-
-
-// };
-
-// endgame = function(){
-
-    // this runs after the questions or timer has completed
+    screen.textContent = '';
     
-//     display
-//         list of highscores
-//         button for replay
-// }
 
+    var endHeader = document.createElement('h3');
+    endHeader.textContent  = "HighScore";
+    endHeaderDiv.appendChild(endHeader);
+
+    var highscore = document.createElement('p');
+    endHeader.textContent = localStorage.getItem("ini") + ":" + localStorage.getItem("score");
+    endHeaderDiv.appendChild(highscore);
+
+
+
+
+
+
+    
+   
+
+
+
+
+
+
+}

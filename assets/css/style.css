@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   background: rgba(0, 200, 140, 0.4);
+  color: white;
 }
 
 #quesitonScreen {
@@ -25,6 +26,7 @@
 
 .header {
   height: 10vh;
+  color: orange;
 }
 .button {
   height: 100px;
@@ -44,4 +46,17 @@
   height: 200px;
   width: 50px;
   background-color: violet;
+}
+
+.sideBar-end {
+  height: 90vh;
+  width: 40vw;
+  background: darkkhaki;
+  text-align: center;
+  font-size: 20px;
+  color: darkorange;
+  position: absolute;
+  left: 15%;
+  top: 15%;
+  word-wrap: hidden;
 }
