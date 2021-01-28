@@ -18,4 +18,4 @@ The Rules goes as fellows
     listen for the users input. Once that occured the callback function will compare the textContent of the element to the correct answer
     for any give question. on either response the a counter is applied and new question is displayed.
 
-    to see for yourself please visit the link
+    to see for yourself please visit the link https://tevvels.github.io/DU_bootcamp_homework_4_code_quiz/.
